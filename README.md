@@ -21,9 +21,10 @@ docker pull tommylau/shadowsocks
 Start an ocserv instance:
 
 ```bash
-docker run -p [port]:[port] -d tommylau/shadowsocks -s 0.0.0.0 -p [port] -k [password] -m [method]
+docker run  --name=[name] -p [port]:[port] -d tommylau/shadowsocks -s 0.0.0.0 -p [port] -k [password] -m [method]
 ```
 
+- `name` is used to identify the containers (optional)
 - `port` is the port you want the server to listen.
 - `password` is the password
 - `method` is the encrypt method
@@ -31,7 +32,7 @@ docker run -p [port]:[port] -d tommylau/shadowsocks -s 0.0.0.0 -p [port] -k [pas
 For a real world example with encrypt method `rc4-md5` with password `Passw0rd` on port `8338`:
 
 ```bash
-docker run -p 8338:8338 -d tommylau/shadowsocks -s 0.0.0.0 -p 8338 -k Passw0rd -m rc4-md5
+docker run --name=ss -p 8388:8388 -d tommylau/shadowsocks -s 0.0.0.0 -p 8388 -k Passw0rd -m rc4-md5
 ```
 
 ## Command line arguments for shadowsocks-libev
