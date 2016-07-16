@@ -2,6 +2,12 @@
 
 docker-shadowsocks is a Shadowsocks boxed in a Docker image built by [Tommy Lau](http://tommy.net.cn/).
 
+## Update on July 16, 2016
+
+From now on, the [Alpine Linux](https://hub.docker.com/_/alpine/) will be used as the base image. The docker image size has been dramatically reduced from around 200MB to only 16MB! The old image used Debian package, and the new one is compiled from the source, so it will alwasy be updated to the latest version of [Shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev).
+
+> NOTICE: You have to use Docker version 1.9.0 or later to support Alpine, DO NOT UPDATE the image if your Docker version is older than 1.9.0
+
 ## What is Shadowsocks?
 
 [Shadowsocks](http://shadowsocks.org/) is a fast tunnel proxy that helps you bypass firewalls.
