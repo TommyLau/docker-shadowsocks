@@ -3,14 +3,18 @@ FROM alpine:3.4
 MAINTAINER Tommy Lau <tommy@gen-new.com>
 
 RUN buildDeps=" \
+		asciidoc \
 		build-base \
 		curl \
+		file \
 		linux-headers \
 		openssl-dev \
+		pcre-dev \
 		tar \
+		xmlto \
 	"; \
 	set -x \
-	&& apk add --update openssl \
+	&& apk add --update openssl pcre \
 	&& apk add $buildDeps \
 	&& SS_VERSION=`curl "https://github.com/shadowsocks/shadowsocks-libev/releases/latest" | sed -n 's/^.*tag\/\(.*\)".*/\1/p'` \
 	&& curl -SL "https://github.com/shadowsocks/shadowsocks-libev/archive/$SS_VERSION.tar.gz" -o ss.tar.gz \
