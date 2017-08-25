@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:3.6
 
 MAINTAINER Tommy Lau <tommy@gen-new.com>
 
@@ -6,27 +6,35 @@ RUN buildDeps=" \
 		asciidoc \
 		build-base \
 		curl \
-		file \
+		libev-dev \
+		libsodium-dev \
 		linux-headers \
-		openssl-dev \
+		mbedtls-dev \
 		pcre-dev \
 		tar \
+		udns-dev \
 		xmlto \
 	"; \
 	set -x \
-	&& apk add --update openssl pcre \
-	&& apk add $buildDeps \
-	&& SS_VERSION=`curl "https://github.com/shadowsocks/shadowsocks-libev/releases/latest" | sed -n 's/^.*tag\/\(.*\)".*/\1/p'` \
-	&& curl -SL "https://github.com/shadowsocks/shadowsocks-libev/archive/$SS_VERSION.tar.gz" -o ss.tar.gz \
+	&& apk add --update --virtual .build-deps $buildDeps \
+	&& SS_VERSION=`curl "https://github.com/shadowsocks/shadowsocks-libev/releases/latest" | sed -n 's/^.*tag\/v\(.*\)".*/\1/p'` \
+	&& curl -SL "https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$SS_VERSION/shadowsocks-libev-$SS_VERSION.tar.gz" -o ss.tar.gz \
 	&& mkdir -p /usr/src/ss \
 	&& tar -xf ss.tar.gz -C /usr/src/ss --strip-components=1 \
 	&& rm ss.tar.gz \
 	&& cd /usr/src/ss \
-	&& ./configure \
+	&& ./configure --disable-documentation \
 	&& make install \
 	&& cd / \
 	&& rm -fr /usr/src/ss \
-	&& apk del $buildDeps \
+	&& runDeps="$( \
+		scanelf --needed --nobanner /usr/local/bin/ss-* \
+			| awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
+			| xargs -r apk info --installed \
+			| sort -u \
+		)" \
+	&& apk add --virtual .run-deps $runDeps \
+	&& apk del .build-deps \
 	&& rm -rf /var/cache/apk/*
 
 ENTRYPOINT ["/usr/local/bin/ss-server"]
