@@ -1,10 +1,11 @@
-FROM alpine:3.6
+FROM alpine:3.7
 
 MAINTAINER Tommy Lau <tommy@gen-new.com>
 
 RUN buildDeps=" \
 		asciidoc \
 		build-base \
+		c-ares-dev \
 		curl \
 		libev-dev \
 		libsodium-dev \
@@ -12,7 +13,6 @@ RUN buildDeps=" \
 		mbedtls-dev \
 		pcre-dev \
 		tar \
-		udns-dev \
 		xmlto \
 	"; \
 	set -x \
